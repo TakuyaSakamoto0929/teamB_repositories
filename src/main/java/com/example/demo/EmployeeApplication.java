@@ -1,13 +1,15 @@
 package com.example.demo;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TeamBProjectApplication {
+@MapperScan("com.example.demo")
+public class EmployeeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TeamBProjectApplication.class, args);
+		SpringApplication.run(EmployeeApplication.class, args);
 	}
 
 }

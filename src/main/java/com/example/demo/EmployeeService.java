@@ -15,10 +15,6 @@ public class EmployeeService {
 	@Autowired
     private EmployeeMapper employeeMapper;
 	
-	 @Transactional
-	    public void registerEmployee(Employee employee) {
-	        employeeMapper.insertEmployee(employee);
-
     // 全社員取得
     public List<Employee> getAllEmployees() {
         return employeeMapper.findAll();

@@ -5,14 +5,15 @@
 	border-bottom:1px solid ;
 	text-align: center;
 }
-.main input{
-	background-color: #dcdcdc;
-}
+
 .syainid{
 	font-size: 20px;
 	height: 300px;
 }
-p{
+.main input{
+	background-color: #dcdcdc;
+}
+.main p{
 	font-size: 30px;
 	text-align: center; 	
 }
@@ -31,10 +32,10 @@ button{
 	padding: 7px 13px;
 	margin:0 50px;
 }
-.select a:hover {
+.select botann:hover{
   background-color: bisque;
 }
-.select botann:hover{
+.select a:hover {
   background-color: bisque;
 }
 .select a{
@@ -45,6 +46,8 @@ button{
 	 border: solid 3px #000000;
 	 margin:0  50px;
 	}
+
+
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

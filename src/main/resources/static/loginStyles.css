@@ -1,0 +1,21 @@
+@charset "UTF-8";
+.main{
+	border-top:1px solid ;
+	border-bottom:1px solid ;
+	text-align: center;
+	height: 300px;
+}
+
+.miss{
+	font-size: 20px;
+	
+	text-align: center;
+}
+input{
+	background-color: #dcdcdc;
+}
+button{
+
+	padding: 5px 20px;
+	border-radius: 10px;
+}

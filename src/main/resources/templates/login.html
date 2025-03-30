@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/loginStyles.css">
+<title>ログイン</title>
+</head>
+<body>
+	<h2>ログイン</h2>
+	<div class="main">
+	    <form action="/login" method="post">
+	        <label for="name">ユーザー名:</label>
+	        <input type="text" id="name" name="name">
+	        <br>
+	        <label for="password">パスワード:</label>
+	        <input type="password" id="password" name="password">
+	        <br>
+	        <button type="submit">ログイン</button>
+	    </form>
+		</div>
+		<div class="miss">
+	    <!-- ログイン失敗時にメッセージを表示 -->
+	    <p th:text="${msg}"></p>
+		</div>
+				<div class="footer">
+					<div th:replace="~{footer}"></div>
+				</div>
+		</body>
+</body>
+</html>

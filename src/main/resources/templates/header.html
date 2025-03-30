@@ -11,8 +11,9 @@
 	<!--<p th:text="${ }">　セッションつかう、ログイン後じゃないと使えない-->
 		<p>
 		ログイン情報
-	＿＿さん
-	yy/mm/dd　00：00：00</p>
+	 <span th:text="${username}"></span>さん
+	 <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span>
+	</p>
 	
 </body>
 </html>

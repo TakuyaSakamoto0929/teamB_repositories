@@ -118,7 +118,7 @@ public class KusunokiController01 {
         if (result.hasErrors() || !employee.getPassword().equals(employee.getPasswordConfirm())) {
             model.addAttribute("error", "パスワードが一致しません");
             model.addAttribute("employee", employee);
-            return "errorPage";
+            return "updateConfirm";
         }
         model.addAttribute("employee", employee);
         return "updateConfirm";

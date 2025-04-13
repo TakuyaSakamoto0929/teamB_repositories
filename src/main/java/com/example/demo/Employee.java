@@ -10,8 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+//import jakarta.validation.constraints.Min;
+//import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.Pattern;
 
-import org.hibernate.annotations.processing.Pattern;
 
 @Entity
 @Table(name="employee")
@@ -20,13 +22,16 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)  // ID を自動生成
 	private Long id;//Longはintより長い数が入る
 	@Column(name = "name", nullable = false)
-	@NotBlank(message = "社員名は必須です")
+	//@NotBlank(message = "社員名は必須です")
 	private String name;
 	@Column(name = "age", nullable = false)
-	@Min(value = 0, message = "年齢は0以上で入力してください")
+	//@Min(value = 0, message = "年齢は0以上で入力してください")
 	private int age;
 	@Column(name = "password", nullable = false)
-	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "パスワードは英大文字・数字を含む8文字以上の半角英数字")
+	//@Pattern(
+		    //regexp = "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+		    //message = "パスワードは8文字以上で、大文字と数字を含めてください。"
+		//)
 	private String password;
 	@Column(name = "start", nullable = false)
 	private LocalDateTime start = LocalDateTime.now();

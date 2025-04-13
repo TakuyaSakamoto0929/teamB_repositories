@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>社員情報更新</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>社員情報更新</h1>
+    <form th:action="@{/employee/updateConfirm}" th:object="${employee}" method="post">
+		<style>
+		        body {
+		            font-family: Arial, sans-serif;
+		            background-color: #f8f8f8;
+		            padding: 40px;
+		        }
+
+		        h1 {
+		            color: red;
+		            font-size: 20px;
+		            border-bottom: 1px solid black;
+		            padding-bottom: 10px;
+		            margin-bottom: 30px;
+		        }
+
+		        form {
+		            max-width: 500px;
+		            margin: 0 auto;
+		        }
+
+		        label {
+		            display: inline-block;
+		            width: 120px;
+		            font-weight: bold;
+		            vertical-align: top;
+		            margin-top: 10px;
+		        }
+
+		        .required::after {
+		            content: "＊";
+		            color: red;
+		            margin-left: 5px;
+		        }
+
+		        input {
+		            width: 250px;
+		            padding: 5px;
+		            margin-top: 8px;
+		            margin-bottom: 15px;
+		            border: 1px solid #ccc;
+		            border-radius: 4px;
+		            font-size: 14px;
+		        }
+
+		        input[readonly] {
+		            background-color: #dcdcdc;
+		        }
+
+		        .button-area {
+		            text-align: center;
+		            margin-top: 30px;
+		        }
+
+		        button {
+		            font-size: 14px;
+		            padding: 8px 20px;
+		            margin: 0 10px;
+		            border-radius: 4px;
+		            cursor: pointer;
+		            border: 1px solid #ccc;
+		        }
+
+		        .confirm-btn {
+		            background-color: #ffd700;
+		            border: 1px solid #999;
+		        }
+
+		        .delete-btn {
+		            background-color: #ffd700;
+		            border: 1px solid #999;
+		        }
+
+		        .back-btn {
+		            background-color: white;
+		            border: 1px solid #000;
+		        }
+		    </style>
+        
+            <label>社員ID:</label>
+            <input type="text" th:field="*{id}" readonly /><br>
+     
+            <label>名前:</label>
+            <input type="text" th:field="*{name}" required  /><br>
+      
+            <label>年齢:</label>
+            <input type="number" th:field="*{age}" required  /><br>
+      
+            <label>パスワード:</label>
+            <input type="password" th:field="*{password}" required  /><br>
+		
+		    <label>パスワード確認:</label>
+		    <input type="password" th:field="*{passwordConfirm}" required /><br>
+		        
+            <label>開始日:</label>
+            <input type="date" th:field="*{start}" required /><br>
+       
+            <label>終了日:</label>
+            <input type="date" th:field="*{endDate}" /><br>
+        
+            <button type="submit">確認</button>
+            <button type="button" onclick="location.href='/employee/list'">戻る</button>
+       
+    </form>
+</body>
+</html>

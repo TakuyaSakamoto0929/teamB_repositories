@@ -1,9 +1,12 @@
 @charset "UTF-8";
 /*メインメニュー*/
-body{
-	border-top:1px solid ;
-	border-bottom:1px solid ;
-	padding: 100px 100px 250px;
+
+
+.menu{
+	border-top: 1px solid;
+	
+	text-align: center;
+	
 	
 }
 .container a{
@@ -19,11 +22,15 @@ body{
 	padding: 10px 0;
 	flex-wrap: wrap;
 	width: fit-content;
-
-	
 }
+
 .container .box2{
 	display: flex;
 	
 }
+.container .box1{
+	display: flex;
+	
+}
+
 

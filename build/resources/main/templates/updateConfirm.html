@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>更新内容確認</title>
+	<style>
+	       body {
+	           font-family: "Arial", sans-serif;
+	           background-color: #f5f5f5;
+	           padding: 40px;
+	       }
+
+	       h1 {
+	           color: red;
+	           font-size: 20px;
+	           margin-bottom: 20px;
+	       }
+
+	       form {
+	           background-color: white;
+	           padding: 30px;
+	           border: 1px solid #ccc;
+	           border-radius: 8px;
+	           width: 420px;
+	           margin: 0 auto;
+	       }
+
+	       div {
+	           margin-bottom: 15px;
+	       }
+
+	       label {
+	           display: inline-block;
+	           width: 100px;
+	           font-weight: bold;
+	       }
+
+	       span {
+	           display: inline-block;
+	           width: 250px;
+	           padding: 5px;
+	           border: 1px solid #ccc;
+	           border-radius: 4px;
+	           background-color: white;
+	       }
+
+	       /* グレー背景の社員ID表示 */
+	       label:contains("ID") + span {
+	           background-color: #d3d3d3;
+	       }
+
+	       .required::after {
+	           content: "＊";
+	           color: red;
+	           margin-left: 3px;
+	       }
+
+	       button {
+	           padding: 8px 16px;
+	           border-radius: 4px;
+	           font-size: 14px;
+	           border: 1px solid #333;
+	           cursor: pointer;
+	           margin-right: 10px;
+	           min-width: 90px;
+	       }
+
+	       button[type="submit"] {
+	           background-color: #ffd700; /* 黄色 */
+	           color: black;
+	           border: 1px solid #999;
+	       }
+
+	       button[type="button"] {
+	           background-color: white;
+	           color: black;
+	           border: 1px solid #999;
+	       }
+	   </style>
+</head>
+<body>
+    <h1>更新内容確認</h1>
+    <form th:action="@{/employee/updateComplete}" th:object="${employee}" method="post">
+        <div>
+            <label>ID:</label>
+            <span th:text="*{id}"></span>
+            <input type="hidden" th:field="*{id}" />
+        </div>
+        <div>
+            <label>社員名:</label>
+            <span th:text="*{name}"></span>
+            <input type="hidden" th:field="*{name}" />
+        </div>
+        <div>
+            <label>年齢:</label>
+            <span th:text="*{age}"></span>
+            <input type="hidden" th:field="*{age}" />
+        </div>
+        <div>
+            <label>パスワード:</label>
+            <span th:text="*{password}"></span>
+            <input type="hidden" th:field="*{password}" />
+        </div>
+        <div>
+            <button type="submit">更新実行</button>
+            <button type="button" onclick="history.back()">戻る</button>
+        </div>
+    </form>
+</body>
+</html>

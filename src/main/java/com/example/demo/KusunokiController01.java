@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 @Controller
-//@SpringBootApplication
-@Service
 
 public class KusunokiController01 {
 	  @Autowired
-	    private LoginRepository loginRepository;
-	  
-	    @Autowired
+		private EmployeeRepository employeeRepository;
+	  @Autowired
 	    private HttpSession session;
+	  @Autowired
+	    private KusunokiService01 kusunokiService01;
 	    
 	    // すべてのリクエストで共通の情報をモデルに追加
 	    @ModelAttribute
@@ -38,28 +36,29 @@ public class KusunokiController01 {
 	        }
 	    }
 
-	  @GetMapping("/login")
+	  @GetMapping("/login") // login.html を表示
 	    public String showLoginPage() {
-	        return "login"; // login.html を表示
+	        return "login";
 	    }
 	  
-	  @PostMapping("/login")
+	  @PostMapping("/login")// ユーザー名 passwordで検索
 	  public String login(@RequestParam("name") String name, 
-	                        @RequestParam("password") String password,
-	                        Model model,HttpSession session) {
-	        // ユーザー名 passwordで検索
-	        Login user = loginRepository.findByNameAndPassword(name,password);
-	        // ユーザーが存在しない、またはパスワードが一致しない場合
-	        if (user == null ) {
+	                      @RequestParam("password") String password,
+	                      Model model,HttpSession session) {
+		  
+	//kusunokiService01で情報確認する
+		  Employee user =kusunokiService01.authenticate (name,password);
+	     
+	       if (user == null ) {
 	            model.addAttribute("msg", "ユーザー名またはパスワードが間違っています");
 	            return "login";  // ログインページに戻す
 	        }
-	        // ログイン成功
+	       
 	        session.setAttribute("username", name); // セッションにユーザー名を保存
 	        return "redirect:/mainMenu";  // メインメニューにリダイレクト
 	  }
 	    
-	 @PostMapping("/bay")//ログアウトごlogin画面に戻る
+	 @PostMapping("/bay")//ログアウト後login画面に戻る
 	 @Transactional
 	 public String bay(Model m) {
 		 session.invalidate();
@@ -67,26 +66,17 @@ public class KusunokiController01 {
 		return "login";
 	}
 	  
-	@RequestMapping("/mainMenu")
+	@RequestMapping("/mainMenu")//メインメニューと未ログインアクセス防止
 	public String Mein(Model m, HttpSession session){
 		String username = (String) session.getAttribute("username");
-
-    // 'username' があればモデルに追加
     if (username != null) {
     	return "mainMenu";
-    }
-		
+    }	
 			 m.addAttribute("msg","ログインしてください");  
-				return "login";
-		
-		
-		
-	}
-	@RequestMapping("/header")
-	public String Header(Model m){
-		return "header";
+				return "login";	
 	}
 
+	
 	@RequestMapping("/delete")
 	public String Delete(@RequestParam(value = "id", required = false) Long id, Model model) {
 	    if (id != null) {
@@ -95,42 +85,25 @@ public class KusunokiController01 {
 	    return "delete";
 	}
 
-	
+//	正しいか確認
 	@RequestMapping("/deleteCheck")
-	public String DeleteCheck(Model m,@RequestParam(value = "id",required = false )Long id){
-		if(id == null||id == 0){
-			m.addAttribute("msg","IDを入力してください");
-			return "delete";//入力画面にもどる
-		}
-		
-		if (!employeeRepository.existsById(id)) {
-        m.addAttribute("msg", "指定されたIDの従業員は存在しません");
-        return "delete";//入力画面にもどる
-		}
-		
-		// IDが存在する場合、確認画面を表示
-        m.addAttribute("id", id);
-        m.addAttribute("employee", employeeRepository.findById(id).get());
-        return "deleteCheck"; // deleteCheck.html に遷移
-		
+	public String deleteCheck(Model m,@RequestParam(value = "id",required = false )Long id){
+		return kusunokiService01.checkEmployeeForDelete(id, m);
 	}
-	@Autowired
-	private EmployeeServeice employeeService;
+
 	
-	
+//	削除処理
 	@PostMapping("/deleteRear")
 	public String deleteRear(Model m,@RequestParam("id")Long id){
-				
-			employeeService.deleteEmployee(id);
+			  kusunokiService01.deleteEmployee(id);
 		      m.addAttribute("msg","削除完了");
-		return "deleteRear";
+		      return "deleteRear";
 		
 	}
 
 	
 	
-	@Autowired
-	private EmployeeRepository employeeRepository;
+
 	@RequestMapping("/test")//DB確認用all表示
 	public String testpage(Model m){
 		List<Employee>employee=employeeRepository.findAll();

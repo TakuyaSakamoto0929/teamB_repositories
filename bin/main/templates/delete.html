@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/deleteStyles.css">
+<title>削除</title>
+
+</head>
+<body>
+	<h2>社員情報削除（確認)</h2>
+		<div class="header">
+			<div th:replace="~{header}"></div>
+		</div>
+	
+		<div class="main">
+			<form action="/deleteCheck" method="post">
+				<div class="syainid">
+					社員ID:<input type="number" name="id"id="id" th:value="${id}">
+					<p th:text="${msg}"></p><!--まちがってますｍｓｇ-->
+				</div>
+			<p>こちらを削除します。よろしいですか？</p>
+		</div>
+		<div class="select">
+			<button>削除</button>
+			</form>
+			<a href="mainMenu">戻る</a>
+<!--		これだとメインメニューにしかいけないから変更する-->
+		</div>
+		<div class="footer">
+			<div th:replace="~{footer}"></div>
+		</div>
+</body>
+</html>

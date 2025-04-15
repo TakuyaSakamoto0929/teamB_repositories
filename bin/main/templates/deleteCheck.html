@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/deleteCheckStyles.css">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>削除確認</h2>
+	    <div class="header">
+			<div th:replace="~{header}"></div>
+	   	</div>
+		
+		<div class="main">
+			<p>従業員ID: <span th:text="${id}">ID</span></p>
+			<p>名前: <span th:text="${employee.name}">名前</span></p>
+			<p>こちらを削除します。よろしいですか？</p>
+		</div>	
+			    
+		<div class="select">	  
+			<form action="/deleteRear" method="post">
+			<input type="hidden" name="id" th:value="${id}">
+			<button type="submit">削除</button>
+			</form>  
+			<a th:href="@{/delete(id=${id})}">キャンセル</a>
+		</div>
+
+		<div class="footer">
+			<div th:replace="~{footer}"></div>
+		</div>
+	      
+</body>
+</html>

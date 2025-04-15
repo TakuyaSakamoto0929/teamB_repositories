@@ -8,10 +8,11 @@ import jakarta.persistence.Table;
 @Table(name="employee")
 public class Employee {
 	@Id
+
 	private Long id;//Longはintより長い数が入る
-	private String name;
+	private String name;//loginも使う
 	private int age;
-	private String password;
+	private String password;//loginも使う
 	private String start;
 	private String updated;
 	private String end;
@@ -26,6 +27,8 @@ public class Employee {
 		this.start=start;
 		this.updated=updated;
 		this.end=end;
+		
+		
 	}
 	public Long getId() {return id;}
 	public void setId(Long id) {this.id=id;}

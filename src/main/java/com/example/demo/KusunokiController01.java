@@ -2,20 +2,18 @@ package com.example.demo;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -36,7 +34,7 @@ public class KusunokiController01 {
 	}
 	
 	@Autowired
-	private EmployeeServeice employeeService;
+	private EmployeeService employeeService;
 	
 	@RequestMapping("/deleteRear")
 	public String deleteRear(Model m,@RequestParam(value = "id",required = false )Long id){
@@ -78,7 +76,8 @@ public class KusunokiController01 {
     }
 
     @PostMapping("/confirm")
-    public String confirm( @ModelAttribute Employee employee, BindingResult result, Model model) {
+    public String confirm( @ModelAttribute Employee employee,
+    		               BindingResult result, Model model) {
         if (result.hasErrors() || !employee.getPassword().equals(employee.getPasswordConfirm())) {
             model.addAttribute("error", "パスワードが一致しません");
             return "insertConfirm";
@@ -88,7 +87,7 @@ public class KusunokiController01 {
     }
 
     @PostMapping("/complete")
-    public String complete(@ModelAttribute Employee employee, Model model) {
+    public <employeeService> String complete(@ModelAttribute Employee employee, Model model) {
     	if (employee.getStart() == null) {
             employee.setStart(LocalDateTime.now());  // デフォルトの日付をセット
         }
@@ -98,28 +97,65 @@ public class KusunokiController01 {
         return "insertComplete";
     }
     
- // 1. 更新画面の表示
-    @GetMapping("/employee/update/{id}")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(id);
-        if (employeeOpt.isPresent()) {
-            model.addAttribute("employee", employeeOpt.get());
-            return "updateForm";
-        } else {
-            model.addAttribute("msg", "社員が見つかりません");
-            return "errorPage";
+    //更新画面のバリデーション
+    private String validateEmployee(Employee emp) {
+        if (emp.getName() == null || emp.getName().isEmpty()) {
+            return "名前は必須です。";
         }
+
+        if (emp.getAge() <= 0) {
+            return "年齢は必須です。";
+        }
+
+        String password = emp.getPassword();
+        if (password == null || !password.matches("^(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+            return "パスワードは8文字以上の英数字で、大文字を1文字以上含めてください。";
+        }
+
+        if (!password.equals(emp.getPasswordConfirm())) {
+            return "パスワードと確認用パスワードが一致しません。";
+        }
+
+        // 開始日は必須
+        if (emp.getStart() == null) {
+            return "開始日は必須です。";
+        }
+
+        // 終了日がある場合は、開始日以降であることを確認（任意）
+        if (emp.getStart() != null && emp.getEndDate() != null) {
+            if (emp.getEndDate().isBefore(emp.getStart().toLocalDate())) {
+                return "終了日は開始日以降の日付にしてください。";
+            }
+        }
+
+        return null; // 問題なし
     }
+
+    
+    
+ // 1. 更新画面の表示
+    @GetMapping("/employee/updateForm")
+    public String showUpdateForm(@ModelAttribute("employee") Employee employee, Model model) {
+        // FlashAttributeからemployeeが来ていない場合は新規で空をセット（直接アクセス対策）
+        if (!model.containsAttribute("employee")) {
+            model.addAttribute("employee", new Employee());
+        }
+        return "updateForm";
+    }
+
 
     // 2. 更新処理の確認
     @PostMapping("/employee/updateConfirm")
-    public String UpdateConfirm(@Validated @ModelAttribute("employee") Employee employee, 
-    		                    BindingResult result, Model model) {
-        if (result.hasErrors() || !employee.getPassword().equals(employee.getPasswordConfirm())) {
-            model.addAttribute("error", "パスワードが一致しません");
-            model.addAttribute("employee", employee);
-            return "updateConfirm";
-        }
+    public String UpdateConfirm(@ModelAttribute Employee employee, 
+    		                     BindingResult result, Model model, 
+    		                     RedirectAttributes redirectAttributes) {
+    	String errorMessage = validateEmployee(employee);
+    	 if (result.hasErrors()){
+    	        // エラーメッセージをFlashに入れて入力画面に戻す
+    	        redirectAttributes.addFlashAttribute("popupError", "日付の形式が正しくありません（例：2024/04/01）");
+    	        redirectAttributes.addFlashAttribute("employee", employee); // 入力値も戻す
+    	        return "redirect:/employee/updateForm";  // GETメソッドで再表示
+    	    }
         model.addAttribute("employee", employee);
         return "updateConfirm";
     }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社員情報登録（完了）</title>
+	<style>
+		body {
+		    margin: 0;
+		    padding: 0;
+		    font-family: Arial, sans-serif;
+		    background-color: #f9f9f9;
+		    
+		    /* 画面全体で中央寄せにしたい場合 */
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    height: 100vh;
+		}
+
+		/* メインコンテナ */
+		.container {
+		    background: #fff;
+		    padding: 20px 30px;
+		    border-radius: 8px;
+		    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+		    width: 400px; 
+		    text-align: center;
+		}
+
+		/* タイトル */
+		h1 {
+		    color: red;
+		    font-size: 20px;
+		    margin-bottom: 20px;
+		    border-bottom: 2px solid #000;
+		    padding-bottom: 5px;
+		}
+
+		/* 完了メッセージ */
+		.message {
+		    font-size: 16px;
+		    margin: 30px 0 40px 0;
+		}
+
+		/* ボタンを横に並べるためのラッパ */
+		.button-group {
+		    display: flex;
+		    justify-content: center;
+		    gap: 10px; /* ボタン間の隙間 */
+		    margin-bottom: 20px;
+		}
+
+		/* ボタンのスタイル */
+		button {
+		    padding: 10px 20px;
+		    font-size: 14px;
+		    border: 2px solid #000;
+		    cursor: pointer;
+		    background-color: #fff;
+		}
+
+		/* メニュー用ボタン */
+		.menu-btn {
+		    background-color: #fff; /* 白地 */
+		    font-weight: bold;
+		}
+
+		/* 検索ボタン */
+		.search-btn {
+		    background-color: #ffd700; /* 黄地 */
+		    font-weight: bold;
+		    color: #000;
+		}
+
+		/* フッター */
+		.footer {
+		    margin-top: 10px;
+		    font-size: 12px;
+		    color: #555;
+		}
+
+	</style>	
+</head>
+<body>
+	<div class="container">
+	        <h1>社員情報登録（完了）</h1>
+			<p th:if="${employee != null}" th:text="'登録完了: ' + ${employee.name}"></p>
+	        
+	        <div class="button-group">
+	            <form th:action="@{/mainMenu}" method="get">
+	                <button type="submit" class="menu-btn">メニュー</button>
+	            </form>
+	            <form th:action="@{/search}" method="get">
+	                <button type="submit" class="search-btn">検索へ</button>
+	            </form>
+	        </div>
+	        
+	        <div class="footer">
+	            <p>Copyright © 2022</p>
+	        </div>
+	    </div>
+
+</body>
+</html>

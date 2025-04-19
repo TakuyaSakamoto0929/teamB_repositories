@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>社員情報更新</h1>
+
     <form th:action="@{/employee/updateConfirm}" th:object="${employee}" method="post">
 		<style>
 		        body {
@@ -89,7 +90,8 @@
             <label>社員ID:</label>
             <input type="text" th:field="*{id}" readonly /><br>
      
-            <label>名前:</label>
+            <label for="name">名前:</label>
+			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></div>
             <input type="text" th:field="*{name}" required  /><br>
       
             <label>年齢:</label>
@@ -107,8 +109,9 @@
             <label>終了日:</label>
             <input type="date" th:field="*{endDate}" /><br>
         
-            <button type="submit">確認</button>
-            <button type="button" onclick="location.href='/employee/list'">戻る</button>
+            <button type="submit" class="confirm-btn">確認</button>
+			<button type="reset" class="delete-btn">削除</button>
+            <button type="button" class="back-btn" onclick="location.href='@{/mainMenu}'">戻る</button>
        
     </form>
 </body>

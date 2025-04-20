@@ -1,7 +1,12 @@
 package com.example.demo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -13,12 +18,29 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
 
 public class KusunokiController01 {
+	
+	@Autowired
+	    private LoginRepository loginRepository;
+	  
+	@Autowired
+	    private HttpSession session;
+	
+	 // すべてのリクエストで共通の情報をモデルに追加
+	    @ModelAttribute
+	    public void addAttributes(Model model, HttpSession session) {
+	        // セッションから 'username' を取得
+	        String username = (String) session.getAttribute("username");
+
+	        // 'username' があればモデルに追加
+	        if (username != null) {
+	            model.addAttribute("username", username);
+	        }
+	    }
 
 	@RequestMapping("/mainMenu")
 	public String Mein(Model m){
@@ -35,6 +57,36 @@ public class KusunokiController01 {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	
+	 @GetMapping("/login")
+	    public String showLoginPage() {
+	        return "login"; // login.html を表示
+	    }
+	  
+	  @PostMapping("/login")
+	  public String login(@RequestParam("name") String name, 
+	                        @RequestParam("password") String password,
+	                        Model model,HttpSession session) {
+	        // ユーザー名 passwordで検索
+	        Login user = loginRepository.findByNameAndPassword(name,password);
+	        // ユーザーが存在しない、またはパスワードが一致しない場合
+	        if (user == null ) {
+	            model.addAttribute("msg", "ユーザー名またはパスワードが間違っています");
+	            return "login";  // ログインページに戻す
+	        }
+	        // ログイン成功
+	        session.setAttribute("username", name); // セッションにユーザー名を保存
+	        return "redirect:/mainMenu";  // メインメニューにリダイレクト
+	  }
+	    
+	 @PostMapping("/bay")//ログアウトごlogin画面に戻る
+	 @Transactional
+	 public String bay(Model m, HttpSession session) {
+		 session.invalidate();
+		 m.addAttribute("msg","ログアウトしました");  
+		return "login";
+	}
 	
 	@RequestMapping("/deleteRear")
 	public String deleteRear(Model m,@RequestParam(value = "id",required = false )Long id){
@@ -89,7 +141,7 @@ public class KusunokiController01 {
     @PostMapping("/complete")
     public <employeeService> String complete(@ModelAttribute Employee employee, Model model) {
     	if (employee.getStart() == null) {
-            employee.setStart(LocalDateTime.now());  // デフォルトの日付をセット
+            employee.setStart(LocalDate.now());  // デフォルトの日付をセット
         }
         
         employeeService.insertEmployee(employee);
@@ -122,8 +174,8 @@ public class KusunokiController01 {
         }
 
         // 終了日がある場合は、開始日以降であることを確認（任意）
-        if (emp.getStart() != null && emp.getEndDate() != null) {
-            if (emp.getEndDate().isBefore(emp.getStart().toLocalDate())) {
+        if (emp.getEndDate() != null) {
+        	if (emp.getEndDate().isBefore(emp.getStart())) {
                 return "終了日は開始日以降の日付にしてください。";
             }
         }
@@ -134,27 +186,31 @@ public class KusunokiController01 {
     
     
  // 1. 更新画面の表示
-    @GetMapping("/employee/updateForm")
-    public String showUpdateForm(@ModelAttribute("employee") Employee employee, Model model) {
-        // FlashAttributeからemployeeが来ていない場合は新規で空をセット（直接アクセス対策）
-        if (!model.containsAttribute("employee")) {
-            model.addAttribute("employee", new Employee());
+    @GetMapping("/updateForm")
+    public String showUpdateForm(@RequestParam("id") Long id, Model model) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()) {
+        	Employee emp = employee.get();
+            emp.setPasswordConfirm(emp.getPassword()); // 初期状態で一致させておく
+            model.addAttribute("employee", emp);
+            return "updateForm";
+        } else {
+            return "redirect:/errorPage"; // 見つからないとき用
         }
-        return "updateForm";
     }
+
 
 
     // 2. 更新処理の確認
     @PostMapping("/employee/updateConfirm")
     public String UpdateConfirm(@ModelAttribute Employee employee, 
-    		                     BindingResult result, Model model, 
-    		                     RedirectAttributes redirectAttributes) {
+    		                     Model model) {
     	String errorMessage = validateEmployee(employee);
-    	 if (result.hasErrors()){
+    	 if (errorMessage != null){
     	        // エラーメッセージをFlashに入れて入力画面に戻す
-    	        redirectAttributes.addFlashAttribute("popupError", "日付の形式が正しくありません（例：2024/04/01）");
-    	        redirectAttributes.addFlashAttribute("employee", employee); // 入力値も戻す
-    	        return "redirect:/employee/updateForm";  // GETメソッドで再表示
+    		    model.addAttribute("popupError", errorMessage);
+    	        model.addAttribute("employee", employee); // 入力値を戻す
+    	        return "updateForm";  // リダイレクトではなく、直接遷移
     	    }
         model.addAttribute("employee", employee);
         return "updateConfirm";
@@ -164,7 +220,8 @@ public class KusunokiController01 {
     @PostMapping("/employee/updateComplete")
     public String completeUpdate(@ModelAttribute Employee employee, Model model) {
     	employee.setPasswordConfirm(null);
-    	employeeService.updateEmployee(employee);
+        employee.setUpdated(LocalDateTime.now()); // 更新日を今に
+        employeeService.updateEmployee(employee);
         return "updateComplete";
     }
 	

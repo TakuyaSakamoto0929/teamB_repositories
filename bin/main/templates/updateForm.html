@@ -88,7 +88,7 @@
 		    </style>
         
             <label>社員ID:</label>
-            <input type="text" th:field="*{id}" readonly /><br>
+            <input type="text" th:field="*{id}" readonly class="form-control" style="background-color: #ddd;" /><br>
      
             <label for="name">名前:</label>
 			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></div>
@@ -114,5 +114,9 @@
             <button type="button" class="back-btn" onclick="location.href='@{/mainMenu}'">戻る</button>
        
     </form>
+	<div th:if="${popupError}" style="color: red; font-weight: bold; margin-bottom: 20px;">
+	    <p th:text="${popupError}"></p>
+	</div>
+
 </body>
 </html>

@@ -34,7 +34,8 @@ public class EmployeeService {
 	            employeeRepository.save(employee);
 	        }
 	    }
-
+	    
+	    //Repositoryへ保存
 		public void insertEmployee(Employee employee) {
 			employeeRepository.save(employee);	
 		}

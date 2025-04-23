@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -121,23 +120,30 @@ public class KusunokiController01 {
         SpringApplication.run(KusunokiController01.class, args);
     }
 	
+	//登録画面
 	@GetMapping("/insert")
-    public String showRegisterForm(Model model) {
+    public String showInsertForm(Model model) {
         model.addAttribute("employee", new Employee());
         return "insert";
     }
-
+	
+	//登録確認
     @PostMapping("/confirm")
-    public String confirm( @ModelAttribute Employee employee,
-    		               BindingResult result, Model model) {
-        if (result.hasErrors() || !employee.getPassword().equals(employee.getPasswordConfirm())) {
-            model.addAttribute("error", "パスワードが一致しません");
-            return "insertConfirm";
+    public String confirm(@ModelAttribute Employee employee, Model model) {
+        String errorMessage = validateEmployee(employee);
+
+        if (errorMessage != null) {
+            // エラーメッセージをモデルに追加（ポップアップ用）
+            model.addAttribute("popupError", errorMessage);
+            model.addAttribute("employee", employee); // 入力値を戻す
+            return "insert"; // insert画面に戻す
         }
+
         model.addAttribute("employee", employee);
         return "insertConfirm";
     }
-
+    
+    //登録完了画面
     @PostMapping("/complete")
     public <employeeService> String complete(@ModelAttribute Employee employee, Model model) {
     	if (employee.getStart() == null) {
@@ -151,7 +157,7 @@ public class KusunokiController01 {
     
     //更新画面のバリデーション
     private String validateEmployee(Employee emp) {
-        if (emp.getName() == null || emp.getName().isEmpty()) {
+        if (emp.getName() == null) {
             return "名前は必須です。";
         }
 
@@ -160,7 +166,7 @@ public class KusunokiController01 {
         }
 
         String password = emp.getPassword();
-        if (password == null || !password.matches("^(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+        if (password == null || !password.matches("^(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {   //パスワードが空もしくは指定した条件と一致しない場合
             return "パスワードは8文字以上の英数字で、大文字を1文字以上含めてください。";
         }
 

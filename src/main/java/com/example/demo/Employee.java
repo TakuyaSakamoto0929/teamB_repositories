@@ -49,29 +49,61 @@ public class Employee {
 		this.updated = (updated != null) ? updated : LocalDateTime.now();
 		this.endDate=endDate;
 	}
-	public Long getId() {return id;}
-	public void setId(Long id) {this.id=id;}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id=id;
+	}
 	
-	public String getName() {return name;}
-	public void setName(String name) {this.name=name;}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name=name;
+	}
 	
-	public Integer getAge() { return age; }
-	public void setAge(Integer age) { this.age = age; }
+	public Integer getAge() {
+		return age; 
+	}
+	public void setAge(Integer age) {
+		this.age = age; 
+	}
 	
-	public String getPassword() {return password;}
-	public void setPassword(String password) {this.password=password;}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password=password;
+	}
 
-	public LocalDate getStart() {return start;}
-	public void setStart(LocalDate start) {this.start=start;}
+	public LocalDate getStart() {
+		return start;
+	}
+	public void setStart(LocalDate start) {
+		this.start=start;
+	}
 	
 	
-	public LocalDateTime getUpdated() {return updated;}
-	public void setUpdated(LocalDateTime updated) {this.updated=updated;}
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+	public void setUpdated(LocalDateTime updated) {
+		this.updated=updated;
+	}
 	
-	public LocalDate getEndDate() {return endDate;}
-	public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
 	
 	//パスワード確認
-	public String getPasswordConfirm() {return passwordConfirm;}
-	public void setPasswordConfirm(String passwordConfirm) {this.passwordConfirm = passwordConfirm;}
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 }

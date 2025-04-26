@@ -85,22 +85,22 @@
 		<form th:action="@{/confirm}" method="post" th:object="${employee}">
             <div class="form-group">
                 <label>社員名<span class="required">*</span></label>
-                <input type="text" th:field="*{name}" >
+                <input type="text" th:field="*{name}" required >
             </div>
             
             <div class="form-group">
                 <label>年齢<span class="required">*</span></label>
-                <input type="number" th:field="*{age}" >
+                <input type="number" th:field="*{age}" required >
             </div>
             
             <div class="form-group">
                 <label>パスワード<span class="required">*</span></label>
-                <input type="password" th:field="*{password}" >
+                <input type="password" th:field="*{password}" required >
             </div>
 
             <div class="form-group">
                 <label>パスワード確認<span class="required">*</span></label>
-                <input type="password" th:field="*{passwordConfirm}" >
+                <input type="password" th:field="*{passwordConfirm}" required >
             </div>
 			
 
@@ -109,6 +109,9 @@
                 <button type="button" class="back-btn" onclick="history.back()">戻る</button>
             </div>
         </form>
+		<div th:if="${popupError}" style="color: red; font-weight: bold; margin-bottom: 20px;">
+			    <p th:text="${popupError}"></p>
+		</div>
     </div>
 </body>
 </html>

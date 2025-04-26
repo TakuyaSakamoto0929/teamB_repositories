@@ -22,11 +22,11 @@ public class Employee {
 	@Column(name = "name", nullable = false)
 	private String name;
 	@Column(name = "age", nullable = false)
-	private int age;
+	private Integer age;
 	@Column(name = "password", nullable = false)
 	private String password;
 	@Column(name = "start", nullable = false)
-	private LocalDateTime start = LocalDateTime.now();
+	private LocalDate start = LocalDate.now();
 	@Column(name = "updated", nullable = false)
 	private LocalDateTime updated = LocalDateTime.now();
 	@Column(name = "end_date")
@@ -40,38 +40,70 @@ public class Employee {
 	
 	public Employee() {}
 	public  Employee(Long id,String name,int age,
-			String password,LocalDateTime start, LocalDateTime updated, LocalDate endDate) {
+			String password,LocalDate start, LocalDateTime updated, LocalDate endDate) {
 		this.id=id;
 		this.name=name;
 		this.age=age;
 		this.password=password;
-		this.start = (start != null) ? start : LocalDateTime.now();  // ★ null の場合デフォルト値を設定
+		this.start = (start != null) ? start : LocalDate.now();  // ★ null の場合デフォルト値を設定
 		this.updated = (updated != null) ? updated : LocalDateTime.now();
 		this.endDate=endDate;
 	}
-	public Long getId() {return id;}
-	public void setId(Long id) {this.id=id;}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id=id;
+	}
 	
-	public String getName() {return name;}
-	public void setName(String name) {this.name=name;}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name=name;
+	}
 	
-	public int getAge() {return age;}
-	public void setAge(int age) {this.age=age;}
+	public Integer getAge() {
+		return age; 
+	}
+	public void setAge(Integer age) {
+		this.age = age; 
+	}
 	
-	public String getPassword() {return password;}
-	public void setPassword(String password) {this.password=password;}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password=password;
+	}
 
-	public LocalDateTime getStart() {return start;}
-	public void setStart(LocalDateTime start) {this.start=start;}
+	public LocalDate getStart() {
+		return start;
+	}
+	public void setStart(LocalDate start) {
+		this.start=start;
+	}
 	
 	
-	public LocalDateTime getUpdated() {return updated;}
-	public void setUpdated(LocalDateTime updated) {this.updated=updated;}
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+	public void setUpdated(LocalDateTime updated) {
+		this.updated=updated;
+	}
 	
-	public LocalDate getEndDate() {return endDate;}
-	public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
 	
 	//パスワード確認
-	public String getPasswordConfirm() {return passwordConfirm;}
-	public void setPasswordConfirm(String passwordConfirm) {this.passwordConfirm = passwordConfirm;}
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 }
